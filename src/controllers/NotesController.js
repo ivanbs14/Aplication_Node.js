@@ -4,7 +4,7 @@ class NotesController {
     /* funçao create nota Consultar DocQbuild */
     async create(request, response) {
         const { title, description, rating, tags } = request.body;
-        const { user_id } = request.params;
+        const user_id = request.user.id;
 
         /* inserindo a nota */
         const note_id = await Knex("movie_notes").insert({
@@ -25,7 +25,7 @@ class NotesController {
 
         await Knex("movie_tags").insert(tagsInsert);
 
-        response.json();
+        return response.json();
 
     }
 
@@ -55,7 +55,9 @@ class NotesController {
 
     /* funçao receber dados, aplicar filtros de notas e tags */
     async index(request, response) {
-        const { title, user_id, tags } = request.query;
+        const { title, tags } = request.query;
+
+        const user_id = request.user.id;
 
         let notes;
 
